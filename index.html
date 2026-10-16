@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפת החוזקות הניהוליות שלי</title>
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF8F2; --paper:#FFFFFF; --ink:#2B3A40; --muted:#5F6F73;
+    --sage:#8FAE8B; --sage-d:#3F6B5E; --sand:#EADBB9; --sky:#BFD9E8;
+    --coral:#E39B72; --line:#E4DED2; --focus:#3F6B5E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:"Heebo",Arial,sans-serif; font-size:17px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:28px 16px 56px}
+  .card{background:var(--paper);border-radius:22px;box-shadow:0 2px 0 var(--line),0 10px 30px rgba(43,58,64,.06);padding:28px 26px}
+  h1{font-size:32px;line-height:1.25;margin:6px 0 6px;font-weight:800;text-align:center}
+  h2{font-size:24px;line-height:1.35;margin:0 0 6px;font-weight:700}
+  .sub{color:var(--muted);text-align:center;margin:0 0 18px}
+  .hero svg{display:block;width:100%;height:auto;max-height:300px}
+  .intro p{margin:0 0 12px}
+  .facts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:18px 0 22px;padding:0;list-style:none}
+  .facts li{background:#F1F5EF;color:var(--sage-d);border-radius:999px;padding:6px 14px;font-weight:500;font-size:15px}
+  .btn{
+    font:inherit;font-weight:700;border:0;border-radius:14px;cursor:pointer;
+    padding:14px 28px;background:var(--sage-d);color:#fff;font-size:18px;
+    transition:transform .12s ease, background .2s ease;
+  }
+  .btn:hover{background:#345a4f}
+  .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:transparent;color:var(--sage-d);border:2px solid var(--sage-d);padding:12px 22px}
+  .btn:focus-visible,.opt:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  .center{text-align:center;margin-top:20px}
+  /* progress */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .count{color:var(--muted);font-size:15px;font-weight:500}
+  .back{font:inherit;background:none;border:0;color:var(--sage-d);cursor:pointer;font-weight:500;font-size:15px;padding:6px 4px}
+  .back[disabled]{visibility:hidden}
+  .bar{height:8px;background:#EEE8DC;border-radius:99px;overflow:hidden;margin-bottom:22px}
+  .bar span{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--sage-d));border-radius:99px;transition:width .35s ease}
+  .stem{font-size:22px;font-weight:700;line-height:1.45;margin:0 0 6px}
+  .ask{color:var(--muted);margin:0 0 18px;font-size:16px}
+  .opts{display:grid;gap:12px}
+  .opt{
+    font:inherit;text-align:right;width:100%;cursor:pointer;
+    background:#FCFAF6;border:2px solid var(--line);border-radius:16px;
+    padding:15px 18px;color:var(--ink);display:flex;gap:14px;align-items:center;
+    transition:border-color .15s ease, background .15s ease, transform .12s ease;
+  }
+  .opt:hover{border-color:var(--sage);background:#F6F9F4}
+  .opt .dot{flex:0 0 22px;height:22px;border-radius:50%;border:2px solid #C9C2B4;display:grid;place-items:center}
+  .opt.sel{border-color:var(--sage-d);background:#EEF4EC}
+  .opt.sel .dot{border-color:var(--sage-d);background:var(--sage-d)}
+  .opt.sel .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+  .fade{animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  /* results */
+  .res-head{text-align:center;margin-bottom:8px}
+  .res-head h1{margin-bottom:4px}
+  .note{background:#FFF6E8;border:1px solid #F0DDBA;border-radius:14px;padding:10px 14px;margin:14px 0 4px;text-align:center;font-weight:500}
+  .strength{display:grid;grid-template-columns:200px 1fr;gap:22px;align-items:center;padding:22px 0;border-top:1px solid var(--line)}
+  .strength:first-of-type{border-top:0}
+  .strength svg{width:100%;height:auto;display:block}
+  .strength .tag{display:inline-block;font-size:14px;font-weight:700;color:var(--sage-d);background:#EEF4EC;border-radius:99px;padding:2px 12px;margin-bottom:6px}
+  .strength p{margin:0 0 8px}
+  .strength ul{margin:0;padding:0 18px 0 0}
+  .strength li{margin:2px 0}
+  .closing{background:#F1F5EF;border-radius:16px;padding:16px 18px;margin-top:18px}
+  .closing p{margin:0}
+  .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:22px}
+  .hidden{display:none}
+  @media (max-width:600px){
+    body{font-size:16px}
+    .card{padding:22px 16px;border-radius:18px}
+    h1{font-size:26px}
+    .stem{font-size:19px}
+    .strength{grid-template-columns:1fr;gap:10px;text-align:right}
+    .strength svg{max-width:200px;margin:0 auto}
+  }
+  @media print{
+    body{background:#fff}
+    .wrap{padding:0}
+    .card{box-shadow:none;padding:0}
+    .actions,footer,.no-print{display:none!important}
+    .strength{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="card intro fade">
+    <div class="hero" aria-hidden="true">
+      <svg viewBox="0 0 640 300" role="img">
+        <rect width="640" height="300" rx="20" fill="#EAF2F6"/>
+        <circle cx="520" cy="70" r="34" fill="#F6D9A6"/>
+        <path d="M0 230 Q120 170 250 205 T520 190 T640 200 V300 H0Z" fill="#CFE0C7"/>
+        <path d="M0 255 Q160 215 330 245 T640 235 V300 H0Z" fill="#A9C6A2"/>
+        <path d="M250 300 Q300 250 320 215 Q330 250 390 300Z" fill="#EADBB9"/>
+        <!-- arc of badges -->
+        <g stroke="#fff" stroke-width="3">
+          <circle cx="160" cy="150" r="24" fill="#E39B72"/>
+          <circle cx="200" cy="96" r="24" fill="#8FAE8B"/>
+          <circle cx="258" cy="60" r="24" fill="#7FA7C2"/>
+          <circle cx="320" cy="48" r="24" fill="#E3C46E"/>
+          <circle cx="382" cy="60" r="24" fill="#B79AC8"/>
+          <circle cx="440" cy="96" r="24" fill="#E39B72"/>
+          <circle cx="480" cy="150" r="24" fill="#5F9C8C"/>
+          <circle cx="320" cy="118" r="24" fill="#D98E8E"/>
+        </g>
+        <!-- tiny glyphs in badges -->
+        <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M150 150 l7 7 l13 -14"/>
+          <path d="M190 88 h20 M190 96 h20 M190 104 h14"/>
+          <path d="M248 66 l8 -10 l8 6 l8 -12"/>
+          <path d="M320 38 v6 M313 52 a7 7 0 1 1 14 0 q0 5 -3 7 h-8 q-3 -2 -3 -7"/>
+          <path d="M382 70 v-14 M382 60 q-8 -2 -9 -9 q8 0 9 9 q1 -9 9 -9 q-1 7 -9 9"/>
+          <path d="M432 92 h16 l-4 4 M448 100 h-16 l4 -4"/>
+          <path d="M470 150 h20 M474 144 v12 M486 144 v12"/>
+          <path d="M313 115 a5 5 0 0 1 7 -2 a5 5 0 0 1 7 2 q0 6 -7 11 q-7 -5 -7 -11"/>
+        </g>
+        <!-- figure on the hill -->
+        <g>
+          <circle cx="320" cy="168" r="13" fill="#2B3A40"/>
+          <path d="M300 214 q2 -30 20 -30 q18 0 20 30 Z" fill="#3F6B5E"/>
+          <path d="M306 196 l-16 -16 M334 196 l16 -16" stroke="#3F6B5E" stroke-width="7" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+    <h1>מפת החוזקות הניהוליות שלי</h1>
+    <p class="sub">שאלון מצבים ניהוליים</p>
+    <p>לפניכם מצבים מהעבודה הניהולית היומיומית. בכל מצב יש ארבע אפשרויות. בפועל עושים בדרך כלל כמה דברים, וכל האפשרויות סבירות. השאלה היא על מה את/ה שם/ה את הדגש.</p>
+    <p>בכל מצב, בחר/י אפשרות אחת: במה היית מתמקד/ת בעיקר. ענה/עני לפי מה שאת/ה עושה בפועל, לא לפי מה שנראה נכון. בסוף תקבל/י את שלוש החוזקות המרכזיות שלך כמנהל/ת.</p>
+    <div class="center"><button class="btn" id="start">מתחילים</button></div>
+  </section>
+
+  <!-- QUESTIONS -->
+  <section id="quiz" class="card hidden">
+    <div class="top">
+      <button class="back" id="back" type="button">→ חזרה</button>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="bar" aria-hidden="true"><span id="barfill"></span></div>
+    <div id="qbox"></div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="card hidden"></section>
+
+  <footer>צפנת, מכון למחקר, פיתוח וייעוץ ארגוני</footer>
+</main>
+
+<script>
+(function(){
+  // ---------- the eight strengths ----------
+  var S = {
+    E:{name:"עשייה ותוצאות",
+       def:"היכולת להביא דברים לידי סיום, לקבוע מה קודם ולעמוד בזמנים.",
+       items:["משימות מגיעות לסיום, גם כשהן מתארכות","יודע/ת לקבוע מה קודם כשהכול דחוף","עומד/ת בזמנים ובהתחייבויות"]},
+    O:{name:"סדר ובהירות",
+       def:"היכולת ליצור סדר, כך שכולם יודעים מי עושה מה ועד מתי.",
+       items:["לכל משימה יש אחראי ומועד ברור","יודע/ת בכל רגע איפה כל דבר עומד","מזהה מוקדם מה תקוע ומטפל/ת בזה"]},
+    P:{name:"ראייה רחבה ותכנון",
+       def:"היכולת לראות את התמונה הכוללת, לצפות מה עומד לקרות ולבנות תוכנית.",
+       items:["רואה איך העבודה של הצוות מתחברת לתמונה הכוללת","צופה מראש מה עלול לקרות","בונה תוכנית עם שלבים ברורים"]},
+    I:{name:"חדשנות ויוזמה",
+       def:"היכולת להביא רעיונות חדשים, לשאול אם אפשר אחרת ולהוביל שינוי.",
+       items:["מביא/ה רעיונות חדשים","שואל/ת אם אפשר לעשות את זה אחרת","יוזם/ת שינויים ומוביל/ה אותם"]},
+    D:{name:"פיתוח אנשים",
+       def:"היכולת לזהות פוטנציאל, לתת אחריות ולעזור לעובדים לצמוח לאורך זמן.",
+       items:["מזהה במה כל עובד יכול לצמוח","נותן/ת אחריות וסומך/ת","נותן/ת משוב שעוזר להתקדם"]},
+    T:{name:"בניית אמון וקשר",
+       def:"היכולת להקשיב, ליצור אמון ולשמור על אווירה טובה בצוות.",
+       items:["מקשיב/ה באמת","אנשים מרגישים בנוח לפנות אליך","שומר/ת על אווירה טובה גם בתקופות קשות"]},
+    N:{name:"השפעה וממשקים",
+       def:"היכולת לשכנע גם בלי סמכות, לייצג את הצוות כלפי מעלה ולחבר בין יחידות.",
+       items:["משכנע/ת גם בלי סמכות","מייצג/ת את הצוות כלפי מעלה","מחבר/ת בין יחידות ואנשים"]},
+    X:{name:"מומחיות מקצועית",
+       def:"ידע עמוק בתחום, הקפדה על איכות והעברת ידע לאחרים.",
+       items:["כתובת מקצועית לאחרים","מקפיד/ה על איכות ודיוק","מעביר/ה ידע הלאה"]}
+  };
+
+  // ---------- illustrations ----------
+  var ART = {
+    E:'<svg viewBox="0 0 200 160" aria-hidden="true"><rect width="200" height="160" rx="18" fill="#FBEFE6"/><ellipse cx="100" cy="138" rx="84" ry="12" fill="#EADBB9"/><path d="M22 138 Q70 64 104 54 Q140 64 180 138Z" fill="#A9C6A2"/><path d="M60 138 Q84 96 104 86" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/><line x1="104" y1="56" x2="104" y2="18" stroke="#2B3A40" stroke-width="3.5" stroke-linecap="round"/><path d="M104 18 L134 27 L104 36Z" fill="#E39B72"/><circle cx="66" cy="112" r="11" fill="#3F6B5E"/><path d="M61 112 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="86" cy="88" r="11" fill="#3F6B5E"/><path d="M81 88 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    O:'<svg viewBox="0 0 200 160" aria-hidden="true"><rect width="200" height="160" rx="18" fill="#EAF2F6"/><rect x="52" y="22" width="96" height="124" rx="12" fill="#fff" stroke="#7FA7C2" stroke-width="3"/><rect x="80" y="14" width="40" height="16" rx="6" fill="#7FA7C2"/><g stroke-linecap="round"><rect x="66" y="48" width="14" height="14" rx="3" fill="#8FAE8B"/><line x1="88" y1="55" x2="134" y2="55" stroke="#C9D6DD" stroke-width="5"/><rect x="66" y="74" width="14" height="14" rx="3" fill="#8FAE8B"/><line x1="88" y1="81" x2="126" y2="81" stroke="#C9D6DD" stroke-width="5"/><rect x="66" y="100" width="14" height="14" rx="3" fill="none" stroke="#8FAE8B" stroke-width="2.5"/><line x1="88" y1="107" x2="130" y2="107" stroke="#C9D6DD" stroke-width="5"/></g><path d="M69 55 l3 3 l6 -7 M69 81 l3 3 l6 -7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="150" cy="122" r="20" fill="#E3C46E"/><path d="M150 110 v12 l8 5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>',
+    P:'<svg viewBox="0 0 200 160" aria-hidden="true"><rect width="200" height="160" rx="18" fill="#EEF4EC"/><path d="M30 40 L74 28 L126 42 L170 30 V122 L126 134 L74 120 L30 132Z" fill="#fff" stroke="#8FAE8B" stroke-width="3" stroke-linejoin="round"/><path d="M74 28 V120 M126 42 V134" stroke="#D9E5D6" stroke-width="2.5"/><path d="M46 112 Q70 70 98 92 T150 52" fill="none" stroke="#E39B72" stroke-width="3.5" stroke-dasharray="7 7" stroke-linecap="round"/><circle cx="46" cy="112" r="6" fill="#3F6B5E"/><path d="M150 36 a12 12 0 0 1 12 12 c0 10 -12 22 -12 22 s-12 -12 -12 -22 a12 12 0 0 1 12 -12z" fill="#3F6B5E"/><circle cx="150" cy="48" r="4.5" fill="#fff"/></svg>',
+    I:'<svg viewBox="0 0 200 160" aria-hidden="true"><rect width="200" height="160" rx="18" fill="#FBF3DD"/><g stroke="#E3C46E" stroke-width="4" stroke-linecap="round"><line x1="100" y1="12" x2="100" y2="24"/><line x1="58" y1="30" x2="66" y2="38"/><line x1="142" y1="30" x2="134" y2="38"/><line x1="42" y1="70" x2="54" y2="70"/><line x1="158" y1="70" x2="146" y2="70"/></g><path d="M100 34 a36 36 0 0 1 22 64 c-4 4 -6 8 -6 14 h-32 c0 -6 -2 -10 -6 -14 a36 36 0 0 1 22 -64z" fill="#F6D9A6" stroke="#E3B65A" stroke-width="3"/><rect x="84" y="116" width="32" height="9" rx="3" fill="#7FA7C2"/><rect x="88" y="128" width="24" height="9" rx="3" fill="#7FA7C2"/><path d="M100 104 V80" stroke="#3F6B5E" stroke-width="3.5" stroke-linecap="round"/><path d="M100 86 q-14 -2 -16 -16 q14 0 16 16 M100 80 q2 -14 16 -16 q-2 14 -16 16" fill="#8FAE8B"/></svg>',
+    D:'<svg viewBox="0 0 200 160" aria-hidden="true"><rect width="200" height="160" rx="18" fill="#EEF4EC"/><line x1="20" y1="132" x2="180" y2="132" stroke="#EADBB9" stroke-width="6" stroke-linecap="round"/><g fill="#E39B72"><path d="M34 112 h28 l-4 20 h-20z"/><path d="M86 112 h28 l-4 20 h-20z"/><path d="M138 112 h28 l-4 20 h-20z"/></g><g stroke="#3F6B5E" stroke-width="3" stroke-linecap="round"><line x1="48" y1="112" x2="48" y2="98"/><line x1="100" y1="112" x2="100" y2="76"/><line x1="152" y1="112" x2="152" y2="46"/></g><g fill="#8FAE8B"><path d="M48 102 q-10 -2 -11 -11 q10 0 11 11z"/><path d="M100 90 q-14 -2 -15 -15 q14 0 15 15z M100 82 q2 -13 15 -15 q-1 13 -15 15z"/><path d="M152 80 q-16 -2 -17 -17 q16 0 17 17z M152 66 q2 -15 17 -17 q-1 15 -17 17z M152 54 q-12 -2 -13 -13 q12 0 13 13z"/></g><path d="M120 30 q20 -14 36 -2" fill="none" stroke="#7FA7C2" stroke-width="3" stroke-linecap="round"/><path d="M150 22 l7 6 l-9 3" fill="none" stroke="#7FA7C2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    T:'<svg viewBox="0 0 200 160" aria-hidden="true"><rect width="200" height="160" rx="18" fill="#FBEDEB"/><path d="M28 40 h80 a14 14 0 0 1 14 14 v30 a14 14 0 0 1 -14 14 h-50 l-16 14 v-14 h-14 a14 14 0 0 1 -14 -14 v-30 a14 14 0 0 1 14 -14z" fill="#BFD9E8"/><path d="M92 64 h80 a14 14 0 0 1 14 14 v30 a14 14 0 0 1 -14 14 h-14 v14 l-16 -14 h-50 a14 14 0 0 1 -14 -14 v-30 a14 14 0 0 1 14 -14z" fill="#A9C6A2"/><path d="M132 82 a8 8 0 0 1 12 -2 a8 8 0 0 1 12 2 q2 10 -12 20 q-14 -10 -12 -20z" fill="#D98E8E"/><g stroke="#fff" stroke-width="4" stroke-linecap="round"><line x1="40" y1="60" x2="86" y2="60"/><line x1="40" y1="74" x2="72" y2="74"/></g></svg>',
+    N:'<svg viewBox="0 0 200 160" aria-hidden="true"><rect width="200" height="160" rx="18" fill="#F1ECF6"/><rect x="18" y="58" width="44" height="74" rx="6" fill="#B79AC8"/><rect x="138" y="44" width="44" height="88" rx="6" fill="#7FA7C2"/><g fill="#fff" opacity=".85"><rect x="28" y="70" width="9" height="9" rx="2"/><rect x="43" y="70" width="9" height="9" rx="2"/><rect x="28" y="88" width="9" height="9" rx="2"/><rect x="43" y="88" width="9" height="9" rx="2"/><rect x="148" y="56" width="9" height="9" rx="2"/><rect x="163" y="56" width="9" height="9" rx="2"/><rect x="148" y="74" width="9" height="9" rx="2"/><rect x="163" y="74" width="9" height="9" rx="2"/></g><path d="M62 100 Q100 60 138 100" fill="none" stroke="#3F6B5E" stroke-width="5" stroke-linecap="round"/><line x1="62" y1="104" x2="138" y2="104" stroke="#3F6B5E" stroke-width="5" stroke-linecap="round"/><g stroke="#3F6B5E" stroke-width="2.5"><line x1="80" y1="86" x2="80" y2="104"/><line x1="100" y1="80" x2="100" y2="104"/><line x1="120" y1="86" x2="120" y2="104"/></g><circle cx="100" cy="40" r="14" fill="#E39B72"/><path d="M93 40 h14 M100 33 v14" stroke="#fff" stroke-width="3" stroke-linecap="round"/><line x1="100" y1="54" x2="100" y2="72" stroke="#E39B72" stroke-width="3" stroke-dasharray="3 4" stroke-linecap="round"/></svg>',
+    X:'<svg viewBox="0 0 200 160" aria-hidden="true"><rect width="200" height="160" rx="18" fill="#EAF2F6"/><path d="M100 46 C80 34 50 34 30 42 V126 C50 118 80 118 100 130Z" fill="#fff" stroke="#7FA7C2" stroke-width="3" stroke-linejoin="round"/><path d="M100 46 C120 34 150 34 170 42 V126 C150 118 120 118 100 130Z" fill="#fff" stroke="#7FA7C2" stroke-width="3" stroke-linejoin="round"/><g stroke="#C9D6DD" stroke-width="4" stroke-linecap="round"><line x1="44" y1="62" x2="86" y2="58"/><line x1="44" y1="76" x2="86" y2="72"/><line x1="44" y1="90" x2="78" y2="87"/><line x1="114" y1="58" x2="156" y2="62"/><line x1="114" y1="72" x2="150" y2="76"/></g><circle cx="140" cy="98" r="18" fill="none" stroke="#3F6B5E" stroke-width="5"/><line x1="153" y1="111" x2="168" y2="126" stroke="#3F6B5E" stroke-width="7" stroke-linecap="round"/><path d="M60 14 l5 10 l11 1.5 l-8 7.5 l2 11 l-10 -5.5 l-10 5.5 l2 -11 l-8 -7.5 l11 -1.5z" fill="#E3C46E"/></svg>'
+  };
+
+  // ---------- 14 situations (balanced: each strength offered 7 times, every pair meets 3 times) ----------
+  var Q = [
+    {s:"נכנסה משימה דחופה מהדרג שמעליך, והצוות כבר בעומס.", o:[
+      ["E","ביצוע חלק מהמשימה בעצמי, כדי לא להעמיס עוד על הצוות"],
+      ["P","בדיקה מה המשימה דוחקת הצידה, ומה המשמעות של זה בהמשך"],
+      ["D","הקצאת המשימה לעובד מתאים וליווי שלו בביצוע"],
+      ["N","תיאום מחדש של הציפיות ולוחות הזמנים מול הדרג שמעליי"]]},
+    {s:"נכנסת מערכת ממוחשבת חדשה שמשנה את הדרך שבה הצוות שלך עובד.", o:[
+      ["O","חלוקה ברורה בצוות: מי לומד מה ומי אחראי על מה במעבר"],
+      ["I","איתור דברים שאפשר לעשות אחרת בעזרת המערכת"],
+      ["T","הקשבה לקשיים של העובדים במעבר"],
+      ["X","שמירה על איכות העבודה המקצועית בזמן המעבר"]]},
+    {s:"שני עובדים בצוות חלוקים על הדרך לבצע משימה משותפת, והמחלוקת מתחילה לעכב את העבודה.", o:[
+      ["E","בחירה שלי באחת הדרכים, כדי שהעבודה תתקדם"],
+      ["O","סיכום מסודר של שתי הדרכים ושל מה שבאמת שנוי במחלוקת"],
+      ["D","השארת ההכרעה בידיהם, עם מועד שעד אליו יחזרו אליי עם פתרון מוסכם"],
+      ["T","ניסיון לשפר את היחסים ביניהם"]]},
+    {s:"תהליך עבודה משותף לצוות שלך וליחידה אחרת לא עובד טוב כבר זמן רב.", o:[
+      ["P","תכנון מסודר של שיפור התהליך, בשלבים"],
+      ["I","חשיבה על דרך אחרת לבצע את התהליך"],
+      ["N","פנייה למנהל היחידה השנייה, כדי לקדם יחד שינוי בתהליך"],
+      ["X","שימוש בידע המקצועי שלי כדי להבין מה לא עובד בתהליך"]]},
+    {s:"שבוע לפני מועד ההגשה של תוצר חשוב שעובד בצוות אחראי עליו, מתברר שחסר עוד לא מעט.", o:[
+      ["E","עבודה בקצב מוגבר של כל הצוות עד שהתוצר נסגר"],
+      ["I","חשיבה אם יש דרך מהירה יותר להשלים את התוצר"],
+      ["D","השארת האחריות אצל העובד, עם עזרה ממני כשהוא צריך"],
+      ["X","החלטה מקצועית מה חייב להיכנס לתוצר, ועל מה אפשר לוותר"]]},
+    {s:"מנהל חדש נכנס לתפקיד מעליך, ואתם כבר אחרי פגישת ההיכרות הראשונה. בחודשים הראשונים:", o:[
+      ["O","הסכמה איתו על דרך העבודה: מה מדווחים, באיזו תדירות ומה דורש את אישורו"],
+      ["P","הצגת הכיוון שאני רואה לצוות בשנים הקרובות"],
+      ["T","בניית קשר אישי ישיר איתו"],
+      ["N","קידום הנושאים שהצוות צריך שיטופלו ברמה שמעליו"]]},
+    {s:"פרויקט שבאחריותך מתעכב, כי שלב אחד בו תקוע כבר כמה שבועות.", o:[
+      ["E","כניסה שלי לשלב התקוע, כדי לקדם אותו"],
+      ["O","מעקב מסודר אחרי המשימות שנותרו ומי אחראי על כל אחת"],
+      ["P","בחינה של מה העיכוב משנה בתוכנית הכוללת"],
+      ["I","ניסיון לעקוף את השלב התקוע בדרך אחרת"]]},
+    {s:"קיבלת לאחריותך פרויקט בתחום שהצוות לא עבד בו עד היום.", o:[
+      ["D","בחירת עובד שיוביל את הפרויקט ויחליט איך לעבוד"],
+      ["T","התייעצות עם הצוות על הדרך לגשת לפרויקט"],
+      ["N","גיוס גורמים בארגון שכבר עסקו בתחום כשותפים"],
+      ["X","לימוד מעמיק של התחום ושל המקורות המקצועיים בו"]]},
+    {s:"מסמך שהצוות שלך שלח ליחידה אחרת יצא עם טעות. הטעות התגלתה ותוקנה.", o:[
+      ["E","סגירה מהירה של האירוע והחזרת הצוות למשימות שעל הפרק"],
+      ["P","היערכות מראש לטעויות דומות שעלולות לקרות בהמשך"],
+      ["T","שיחה אישית עם העובד על מה שקרה"],
+      ["X","בדיקה של מסמכים דומים, כדי לוודא שאין בהם אותה טעות"]]},
+    {s:"תחילת שנה, וצריך לקבוע יעדים לצוות.", o:[
+      ["O","יעד שמסדיר תחום שהיום לא ברור מי אחראי עליו"],
+      ["I","יעד שמשנה משהו בדרך העבודה"],
+      ["D","יעד אישי לכל עובד, שמרחיב את התפקיד שלו"],
+      ["N","יעד משותף עם יחידה שאנחנו עובדים איתה בממשק"]]},
+    {s:"התבקשת להוביל הכנה של תוצר יחד עם שותפים מכמה יחידות.", o:[
+      ["E","הכנת טיוטה ראשונה, שלי או של הצוות שלי, כדי שיהיה ממה להתקדם"],
+      ["O","חלוקה ברורה של מי מכין מה ועד מתי"],
+      ["N","יצירת הסכמה בין היחידות על מה התוצר צריך להשיג"],
+      ["X","הגדרת הנתונים והתוכן המקצועי שהתוצר צריך לכלול"]]},
+    {s:"ההנהלה שינתה את סדרי העדיפויות של הארגון, וחלק מהעבודה של הצוות שלך יורד מסדר היום.", o:[
+      ["P","בניית תוכנית עבודה מעודכנת לצוות לפי סדרי העדיפויות החדשים"],
+      ["I","זיהוי תחומים חדשים שהצוות יכול לתרום בהם, והצעה שלהם להנהלה"],
+      ["D","שיבוץ מחדש של העובדים שהעבודה שלהם ירדה, לפי מה שהם טובים בו"],
+      ["T","שקיפות מול הצוות על מה שידוע ועל מה שעוד לא"]]},
+    {s:"העומס על הצוות גבוה כבר כמה חודשים, והעבודה לא מתקדמת בקצב הנדרש.", o:[
+      ["E","הבהרה לצוות כמה חשוב לעמוד בזמנים בתקופה הזו"],
+      ["I","בדיקה איזה חלק מהעבודה אפשר לעשות אחרת ובפחות זמן"],
+      ["T","שיחה עם כל עובד על איך הוא מתמודד"],
+      ["N","פנייה להנהלה לבקשת תוספת כוח אדם או הקלה ביעדים"]]},
+    {s:"עובד חדש הצטרף לצוות, והוא בחודש הראשון שלו.", o:[
+      ["O","הגדרה ברורה של מה מצופה ממנו ומי עושה מה"],
+      ["P","הסבר על התמונה הרחבה: מה היחידה עושה ואיפה היא בארגון"],
+      ["D","משימה אמיתית באחריותו כבר מהשבועות הראשונים"],
+      ["X","העברת הידע המקצועי שהוא צריך לתפקיד"]]}
+  ];
+
+  // ---------- state ----------
+  var KEY = "strengths-map-v9";
+  var state = {order:null, answers:[], i:0};
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+  function load(){
+    try{
+      var raw = localStorage.getItem(KEY); if(!raw) return false;
+      var st = JSON.parse(raw);
+      if(st && st.order && st.order.length===Q.length){ state = st; return true; }
+    }catch(e){}
+    return false;
+  }
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+  function newOrder(){ return Q.map(function(q){ return shuffle([0,1,2,3]); }); }
+
+  var $ = function(id){ return document.getElementById(id); };
+  function show(id){ ["intro","quiz","results"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id); }); window.scrollTo({top:0,behavior:"smooth"}); }
+
+  // ---------- question rendering ----------
+  function renderQ(){
+    var i = state.i, q = Q[i];
+    $("count").textContent = "מצב " + (i+1) + " מתוך " + Q.length;
+    $("barfill").style.width = Math.round(i / Q.length * 100) + "%";
+    $("back").disabled = (i===0);
+    var html = '<div class="fade"><p class="stem">' + q.s + '</p><p class="ask">במה תתמקד/י בעיקר?</p><div class="opts" role="radiogroup">';
+    state.order[i].forEach(function(k){
+      var sel = state.answers[i]===k;
+      html += '<button type="button" role="radio" aria-checked="'+sel+'" class="opt'+(sel?' sel':'')+'" data-k="'+k+'"><span class="dot"></span><span>'+q.o[k][1]+'</span></button>';
+    });
+    html += '</div></div>';
+    $("qbox").innerHTML = html;
+    Array.prototype.forEach.call(document.querySelectorAll(".opt"), function(b){
+      b.addEventListener("click", function(){ choose(parseInt(b.getAttribute("data-k"),10)); });
+    });
+  }
+  var busy = false;
+  function choose(k){
+    if(busy) return; busy = true;
+    state.answers[state.i] = k; state.tie = []; save();
+    Array.prototype.forEach.call(document.querySelectorAll(".opt"), function(b){
+      var on = parseInt(b.getAttribute("data-k"),10)===k;
+      b.classList.toggle("sel", on); b.setAttribute("aria-checked", on);
+    });
+    setTimeout(function(){
+      busy = false;
+      if(state.i < Q.length-1){ state.i++; save(); renderQ(); }
+      else { $("barfill").style.width="100%"; renderResults(); }
+    }, 320);
+  }
+
+  // ---------- results ----------
+  function joinNames(arr){
+    if(arr.length===1) return arr[0];
+    return arr.slice(0,-1).join(", ") + " ו" + arr[arr.length-1];
+  }
+  function scores(){
+    var sc = {}; Object.keys(S).forEach(function(k){ sc[k]=0; });
+    state.answers.forEach(function(k,i){ if(k!=null) sc[Q[i].o[k][0]]++; });
+    return sc;
+  }
+  function renderResults(){
+    var sc = scores();
+    var keys = Object.keys(S).sort(function(a,b){ return sc[b]-sc[a]; });
+    var shown = [], cand = null, i = 0;
+    while(shown.length < 3 && i < keys.length){
+      var v = sc[keys[i]];
+      var grp = keys.filter(function(k){ return sc[k]===v; });
+      if(shown.length + grp.length <= 3){ shown = shown.concat(grp); i += grp.length; }
+      else { cand = grp; break; }
+    }
+    if(cand){
+      // 1) head-to-head: choices of each tied strength in situations where another tied strength was also offered
+      var h2h = {};
+      cand.forEach(function(g){
+        h2h[g] = 0;
+        state.answers.forEach(function(k,i){
+          if(k==null) return;
+          var keysHere = Q[i].o.map(function(o){ return o[0]; });
+          if(Q[i].o[k][0]===g && keysHere.some(function(x){ return x!==g && cand.indexOf(x)>=0; })) h2h[g]++;
+        });
+      });
+      // 2) still tied: stable rule derived from the answers (same answers, same result)
+      var seed = state.answers.join("");
+      var hs = function(g){ var x=0, t=seed+g; for(var j=0;j<t.length;j++){ x=(x*31 + t.charCodeAt(j))>>>0; } return x; };
+      cand.sort(function(a,b){ return (h2h[b]-h2h[a]) || (hs(a)-hs(b)); });
+      shown = shown.concat(cand).slice(0,3);
+    }
+    var html = '<div class="res-head fade"><h1>שלוש החוזקות המרכזיות שלך כמנהל/ת</h1></div>';
+    shown.forEach(function(k){
+      var s = S[k];
+      html += '<article class="strength fade"><div>' + ART[k] + '</div><div><h2>' + s.name + '</h2><p>' + s.def + '</p><ul>' +
+        s.items.map(function(t){ return '<li>'+t+'</li>'; }).join('') + '</ul></div></article>';
+    });
+    html += '<div class="actions"><button class="btn" id="print" type="button">הדפסה או שמירה כ-PDF</button><button class="btn ghost" id="again" type="button">מילוי מחדש</button></div>';
+    $("results").innerHTML = html;
+    $("print").addEventListener("click", function(){ window.print(); });
+    $("again").addEventListener("click", function(){
+      state = {order:newOrder(), answers:[], i:0, tie:[]}; save(); show("quiz"); renderQ();
+    });
+    show("results");
+  }
+
+  // ---------- wiring ----------
+  $("start").addEventListener("click", function(){
+    if(!load()){ state = {order:newOrder(), answers:[], i:0, tie:[]}; save(); }
+    if(state.answers.filter(function(a){return a!=null;}).length===Q.length){ renderResults(); return; }
+    show("quiz"); renderQ();
+  });
+  $("back").addEventListener("click", function(){ if(state.i>0){ state.i--; save(); renderQ(); } });
+})();
+</script>
+</body>
+</html>
